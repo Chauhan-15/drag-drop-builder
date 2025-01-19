@@ -3,7 +3,7 @@
         <div class="flex items-center space-x-2">
             <!-- Toggle Button Visible on Small Screens -->
             <img 
-                class="w-6 h-6 cursor-pointer block lg:hidden" 
+                class="w-6 h-6 cursor-pointer block sm:hidden" 
                 src="/icons/menu.png" 
                 @click="$emit('toggle-sidebar')"
             />

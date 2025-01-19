@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- Main Sidebar -->
-        <aside :class="{'block': isSidebarOpen, 'hidden': !isSidebarOpen}" class="lg:block w-48 sm:w-56 fixed bg-sidebar text-title h-screen py-4 transition-all duration-300">
+        <aside :class="{'block': isSidebarOpen, 'hidden': !isSidebarOpen}" class="sm:block w-48 sm:w-56 fixed bg-sidebar text-title h-screen py-4 transition-all duration-300">
             <ul class="space-y-2">
                 <li v-for="(item, index) in menuItems" :key="index" class="cursor-pointer group relative hover:bg-sidebar-hover">
                     <!-- Item Content -->
@@ -12,7 +12,7 @@
                         </div>
                         <div>
                             <!-- Arrow rotation based on submenu state -->
-                            <img class="w-4 sm:w-6 h-4 sm:h-6 cursor-pointer transition-transform" :class="{ 'rotate-180': openedSubMenuIndex === index }" src="/icons/down-arrow.png" alt="arrow"/>
+                            <img class="w-4 sm:w-5 h-4 sm:h-5 cursor-pointer transition-transform" :class="{ 'rotate-180': openedSubMenuIndex === index }" src="/icons/down-arrow.png" alt="arrow"/>
                         </div>
                     </div>
                     <!-- Submenu (Appears below the menu item with animation) -->
@@ -20,8 +20,14 @@
                         <div v-if="openedSubMenuIndex === index" class="w-full bg-sidebar text-title">
                             <!-- Submenu List -->
                             <ul class="">
-                                <li v-for="(submenu, subIndex) in item.subMenu" :key="subIndex" class="p-4 cursor-pointer">
-                                    <div class="first-letter:capitalize text-xl">{{ submenu.label }}</div>
+                                <li v-for="(submenu, subIndex) in item.subMenu" :key="subIndex" class="px-4 py-2 cursor-pointer">
+                                    <div class="space-y-1" draggable="true" @dragstart="onDragStart(submenu)">
+                                        <h1 class="first-letter:capitalize text-sm">{{ submenu.label }}</h1>
+                                        <div class="bg-header rounded-md p-2">
+                                            <!-- Render the submenu component -->
+                                            <component :is="submenu.component" />
+                                        </div>
+                                    </div>
                                 </li>
                             </ul>
                         </div>
@@ -33,7 +39,14 @@
 </template>
 
 <script>
+import TextField from "../Preview/Text/TextField.vue";
+import ImageField from "../Preview/Image/ImageField.vue";
+
 export default {
+    components: {
+        TextField,
+        ImageField,
+    },
     props: {
         isSidebarOpen: {
             type: Boolean,
@@ -48,16 +61,14 @@ export default {
                     label: "Text",
                     icon: "/icons/text.png",
                     subMenu: [
-                        { label: "Submenu 1" },
-                        { label: "Submenu 2" },
+                        { label: "text", component: "TextField" },
                     ],
                 },
                 {
                     label: "Image",
                     icon: "/icons/image.png",
                     subMenu: [
-                        { label: "Submenu A" },
-                        { label: "Submenu B" },
+                        { label: "image", component: "ImageField" },
                     ],
                 },
             ],
@@ -67,6 +78,13 @@ export default {
         toggleSubMenu(index) {
             this.openedSubMenuIndex = this.openedSubMenuIndex === index ? null : index;
         },
+
+        onDragStart(submenu) {
+        const dragData = JSON.stringify({
+            component: submenu.component,
+        });
+        event.dataTransfer.setData("application/json", dragData);
+    },
     },
 };
 </script>
