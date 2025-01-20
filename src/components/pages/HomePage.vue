@@ -31,6 +31,13 @@
 					>
 						<img src="/icons/move-down.png" alt="move-down" class="w-5 h-5">
 					</div>
+					<div 
+						class="p-1 border border-sidebar-hover cursor-pointer shadow bg-white"
+						@click="onDelete(index)"
+						title="Delete"
+					>
+						<img src="/icons/delete.png" alt="delete" class="w-5 h-5">
+					</div>
 				</div>
 			</div>
 		</div>
@@ -123,6 +130,10 @@
 			droppedItems.value[index] = droppedItems.value[index + 1];
 			droppedItems.value[index + 1] = temp;
 		}
+	};
+	// Handle deleting an item
+	const onDelete = (index) => {
+		droppedItems.value.splice(index, 1);
 	};
 </script>
   
