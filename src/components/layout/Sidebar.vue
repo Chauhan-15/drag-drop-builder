@@ -20,8 +20,14 @@
                         <div v-if="openedSubMenuIndex === index" class="w-full bg-sidebar text-title">
                             <!-- Submenu List -->
                             <ul class="">
-                                <li v-for="(submenu, subIndex) in item.subMenu" :key="subIndex" class="px-4 py-2 cursor-pointer">
-                                    <div class="space-y-1" draggable="true" @dragstart="onDragStart(submenu)">
+                                <li 
+                                    v-for="(submenu, subIndex) in item.subMenu" 
+                                    :key="subIndex" 
+                                    class="px-4 py-2 cursor-pointer"
+                                    @dragstart="onDragStart(submenu)"
+                                    draggable="true"
+                                >
+                                    <div class="space-y-1">
                                         <h1 class="first-letter:capitalize text-sm">{{ submenu.label }}</h1>
                                         <div class="bg-header rounded-md p-2">
                                             <!-- Render the submenu component -->
@@ -80,11 +86,11 @@ export default {
         },
 
         onDragStart(submenu) {
-        const dragData = JSON.stringify({
-            component: submenu.component,
-        });
-        event.dataTransfer.setData("application/json", dragData);
-    },
+            const dragData = JSON.stringify({
+                component: submenu.component,
+            });
+            event.dataTransfer.setData("application/json", dragData);
+        },
     },
 };
 </script>
