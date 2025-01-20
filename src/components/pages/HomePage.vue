@@ -1,5 +1,5 @@
 <template>
-	<div class="border border-dashed border-gray-400 h-full rounded-md w-1/2 p-4" @dragover="onDragOverWorkspace" @drop="onDropWorkspace">
+	<div class="h-full border rounded-md w-1/2 p-4" :class="{'border-gray-400 border-dashed': droppedItems.length === 0, 'border-gray-200 shadow-md': droppedItems.length > 0}" @dragover="onDragOverWorkspace" @drop="onDropWorkspace">
 		<div v-if="droppedItems.length > 0">
 			<!-- Render the dynamically dropped components -->
 			<div 
@@ -8,13 +8,30 @@
 				class="relative group p-2 rounded-md"
 				@dragover="onDragOverItem(index, $event)" 
 				@drop="onDropItem(index, $event)"
-				:class="{'bg-gray-100': draggingOverIndex === index}" 
+				:class="{'border border-gray-400 border-dashed': draggingOverIndex === index}" 
 			>
 				<!-- Render the component with dynamic props -->
 				<component 
 					:is="components[item.component]" 
 					:id="'component-' + index" 
 				/>
+				<!-- Hover Icons -->
+				<div class="absolute -top-3 -right-8 hidden group-hover:flex space-x-2">
+					<div 
+						class="p-1 border border-sidebar-hover cursor-pointer shadow bg-white"
+						@click="moveUp(index)"
+						title="Move Up"
+					>
+						<img src="/icons/move-up.png" alt="move-up" class="w-5 h-5">
+					</div>
+					<div 
+						class="p-1 border border-sidebar-hover cursor-pointer shadow bg-white"
+						@click="moveDown(index)"
+						title="Move Down"
+					>
+						<img src="/icons/move-down.png" alt="move-down" class="w-5 h-5">
+					</div>
+				</div>
 			</div>
 		</div>
 		<div v-else class="flex flex-col justify-center items-center">
@@ -89,6 +106,22 @@
 			// Insert the dragged item at the hovered position
 			droppedItems.value.splice(draggingOverIndex.value, 0, draggedItem);
 			draggingOverIndex.value = null; // Reset hover state
+		}
+	};
+	// Handle moving an item up in the sequence
+	const moveUp = (index) => {
+		if (index > 0) {
+			const temp = droppedItems.value[index];
+			droppedItems.value[index] = droppedItems.value[index - 1];
+			droppedItems.value[index - 1] = temp;
+		}
+	};
+	// Handle moving an item down in the sequence
+	const moveDown = (index) => {
+		if (index < droppedItems.value.length - 1) {
+			const temp = droppedItems.value[index];
+			droppedItems.value[index] = droppedItems.value[index + 1];
+			droppedItems.value[index + 1] = temp;
 		}
 	};
 </script>
