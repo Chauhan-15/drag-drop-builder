@@ -12,7 +12,7 @@
             </div>
         </div>
         <div>
-            <button class="bg-secondary-button sm:text-xl rounded-md px-6 text-center py-2 first-letter:capitalize tracking-wider font-semibold">save</button>
+            <button @click="$emit('save-dropped-items')" class="bg-primary-button sm:text-xl rounded-md px-6 text-center py-2 first-letter:capitalize tracking-wider font-semibold">save</button>
         </div>
    </div>
 </template>

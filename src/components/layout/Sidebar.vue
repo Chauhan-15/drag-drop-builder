@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- Main Sidebar -->
-        <aside :class="{'block': isSidebarOpen, 'hidden': !isSidebarOpen}" class="sm:block w-48 sm:w-56 fixed bg-sidebar text-title h-screen py-4 transition-all duration-300">
+        <aside :class="{'block': isSidebarOpen, 'hidden': !isSidebarOpen}" class="sm:block w-48 sm:w-56 z-40 fixed bg-sidebar text-title h-screen py-4 transition-all duration-300">
             <ul class="space-y-2">
                 <li v-for="(item, index) in menuItems" :key="index" class="cursor-pointer group relative hover:bg-sidebar-hover">
                     <!-- Item Content -->
@@ -67,14 +67,14 @@
                         label: "Text",
                         icon: "/icons/text.png",
                         subMenu: [
-                            { label: "text", component: "TextField" },
+                            { label: "text one", component: "TextField" },
                         ],
                     },
                     {
                         label: "Image",
                         icon: "/icons/image.png",
                         subMenu: [
-                            { label: "image", component: "ImageField" },
+                            { label: "image one", component: "ImageField" },
                         ],
                     },
                 ],

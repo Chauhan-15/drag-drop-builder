@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="h-full border rounded-md w-1/2 p-4"
+		class="h-full border rounded-md w-11/12 sm:w-1/2 p-2 sm:p-4"
 		:class="{
 			'border-gray-400 border-dashed': droppedItems.length === 0,
 			'border-gray-200 shadow-md': droppedItems.length > 0
@@ -27,14 +27,14 @@
 					:item="droppedItems[index]"
 				/>
 				<!-- Hover Icons -->
-				<div class="absolute -top-3 -right-8 hidden group-hover:flex space-x-2">
+				<div class="absolute -top-6 sm:-top-3 -right-[0.4rem] md:-right-[5.8rem] hidden group-hover:flex space-x-2">
 					<div
 						class="p-1 border border-sidebar-hover cursor-pointer shadow bg-white"
 						@click="moveUp(index)"
 						title="Move Up"
 						aria-label="Move item up"
 					>
-						<img src="/icons/move-up.png" alt="move-up" class="w-5 h-5">
+						<img src="/icons/form/move-up.png" alt="move-up" class="w-5 h-5">
 					</div>
 					<div
 						class="p-1 border border-sidebar-hover cursor-pointer shadow bg-white"
@@ -42,7 +42,7 @@
 						title="Move Down"
 						aria-label="Move item down"
 					>
-						<img src="/icons/move-down.png" alt="move-down" class="w-5 h-5">
+						<img src="/icons/form/move-down.png" alt="move-down" class="w-5 h-5">
 					</div>
 					<div
 						class="p-1 border border-sidebar-hover cursor-pointer shadow bg-white"
@@ -50,7 +50,15 @@
 						title="Edit"
 						aria-label="Edit item"
 					>
-						<img src="/icons/edit.png" alt="edit" class="w-5 h-5">
+						<img src="/icons/form/edit.png" alt="edit" class="w-5 h-5">
+					</div>
+					<div
+						class="p-1 border border-sidebar-hover cursor-pointer shadow bg-white"
+						@click="copyItem(index)"
+						title="Copy"
+						aria-label="Copy item"
+					>
+						<img src="/icons/form/copy.png" alt="copy" class="w-5 h-5">
 					</div>
 					<div
 						class="p-1 border border-sidebar-hover cursor-pointer shadow bg-white"
@@ -58,13 +66,13 @@
 						title="Delete"
 						aria-label="Delete item"
 					>
-						<img src="/icons/delete.png" alt="delete" class="w-5 h-5">
+						<img src="/icons/form/delete.png" alt="delete" class="w-5 h-5">
 					</div>
 				</div>
 			</div>
 		</div>
 		<div v-else class="flex flex-col justify-center items-center">
-			<img class="w-28 h-28" src="/public/drag-drop.png" alt="drag-drop">
+			<img class="w-28 h-28" src="/icons/drag-drop.png" alt="drag-drop">
 			<h1 class="text-gray-400">Drag and drop items into the workspace</h1>
 		</div>
 	</div>
@@ -81,7 +89,7 @@
   </template>
   
   <script setup>
-	import { ref } from 'vue';
+	import { ref, defineExpose } from 'vue';
 	
 	// Import the draggable components
 	import TextField from '../Field/TextField/TextField.vue';
@@ -99,7 +107,11 @@
 	const droppedItems = ref([]);
 	const draggingOverIndex = ref(null);
 	const activeModalIndex = ref(null);
-	
+
+	// Expose droppedItems to parent component (App.vue)
+	defineExpose({
+		droppedItems
+	})
 	// Allow the drop by preventing the default behavior
 	const onDragOverWorkspace = (event) => {
 		event.preventDefault(); // Necessary to allow dropping
@@ -184,5 +196,10 @@
 		if (index >= 0 && index < droppedItems.value.length) {
 			activeModalIndex.value = index;
 		}
+	};
+	// Copy an item and add it below the original one
+	const copyItem = (index) => {
+		const itemToCopy = { ...droppedItems.value[index] }; // Clone the item to keep the original data
+		droppedItems.value.splice(index + 1, 0, itemToCopy); // Insert the copied item below the original
 	};
   </script>
