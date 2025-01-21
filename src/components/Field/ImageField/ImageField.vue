@@ -10,7 +10,7 @@
 		<!-- Modal Component -->
 		<Modal :isOpen="isModalOpen" @update:isOpen="isModalOpen = $event">
 			<h3 class="text-xl mb-4">Select an Image</h3>
-			<div class="grid grid-cols-5 gap-8 mb-4">
+			<div class="grid grid-cols-2 gap-2 sm:grid-cols-5 sm:gap-8 mb-4">
 				<!-- Predefined Images Section -->
 				<div v-for="(image, index) in predefinedImages" :key="index" @click="selectPredefinedImage(index)" 
 					class="relative cursor-pointer flex flex-col items-center w-20 h-20 overflow-hidden rounded-md border-2 p-1"
