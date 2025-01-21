@@ -96,13 +96,6 @@
 				// Emit the updated modalValue value to parent
 				this.$emit("update:modalValue", {id: this.id, value: this.predefinedImages[index]} );
 			},
-			finalizeSelection() {
-				if (this.temporarySelection) {
-					// Emit the finalized modalValue value to parent
-					this.$emit("update:modalValue", {id: this.id, value: this.temporarySelection} );
-				}
-				this.isModalOpen = false;
-			},
 		},
 		mounted() {
 			// Initialize selectedIndex based on the initial modalValue prop
