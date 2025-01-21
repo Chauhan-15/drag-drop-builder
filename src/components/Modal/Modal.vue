@@ -17,10 +17,10 @@
     export default {
         name: "Modal",
         props: {
-        isOpen: {
-            type: Boolean,
-            required: true,
-        },
+            isOpen: {
+                type: Boolean,
+                required: true,
+            },
         },
     };
 </script>

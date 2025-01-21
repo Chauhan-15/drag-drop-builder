@@ -16,6 +16,7 @@
 				class="relative group p-2 rounded-md transition-all duration-300"
 				@dragover="onDragOverItem(index, $event)"
 				@drop="onDropItem(index, $event)"
+				@click="openEditModal(index)"
 				:class="[{ 'border border-gray-400 border-dashed': draggingOverIndex === index }]"
 			>
 				<!-- Render the component with dynamic props -->

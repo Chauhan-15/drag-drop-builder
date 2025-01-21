@@ -1,15 +1,15 @@
 <template>
 	<div>
 		<!-- Image Preview -->
-		<div :class="['cursor-pointer group flex flex-col', item.verticalAlignment]" @click="openModal">
-			<div class="w-28 h-28 overflow-hidden">
+		<div :class="['group flex flex-col', item.verticalAlignment]">
+			<div class="w-28 h-28 overflow-hidden cursor-pointer" @click="openModal">
 				<img v-if="modalValue" :src="modalValue" alt="Selected Preview" class="w-full h-full object-cover" />
 				<img v-else :src="placeholderImage" alt="Placeholder" class="w-full h-full object-cover" />
 			</div>
 		</div>
 		<!-- Modal Component -->
 		<Modal :isOpen="isModalOpen" @update:isOpen="isModalOpen = $event">
-			<h3 class="text-xl mb-4">Select an Image</h3>
+			<h3 class="sm:text-xl mb-4 text-sidebar">Select an Image</h3>
 			<div class="grid grid-cols-2 gap-2 sm:grid-cols-5 sm:gap-8 mb-4">
 				<!-- Predefined Images Section -->
 				<div v-for="(image, index) in predefinedImages" :key="index" @click="selectPredefinedImage(index)" 

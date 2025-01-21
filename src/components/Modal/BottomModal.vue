@@ -5,7 +5,7 @@
             <img v-if="isExpanded" src="/icons/down-arrow.png" alt="drag down" class="w-6 h-6">
             <img v-else src="/icons/up-arrow.png" alt="drag up" class="w-6 h-6">
         </div>
-        <div v-if="isExpanded" class=" max-h-60 overflow-scroll">
+        <div v-if="isExpanded" class="max-h-44 overflow-scroll">
             <!-- for text -->
             <div v-if="item.component === 'TextField'" class="sm:grid sm:grid-cols-2 sm:gap-4 py-4 space-y-2 sm:space-y-0">
                 <div class="space-y-1 sm:space-y-2">
