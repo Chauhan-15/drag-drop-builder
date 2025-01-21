@@ -11,17 +11,11 @@
 				:class="{'border border-gray-400 border-dashed': draggingOverIndex === index}" 
 			>
 				<!-- Render the component with dynamic props -->
-				<component v-if="item.component === 'TextField'"
-					:is="components[item.component]" 
-					:id="'component-' + index" 
-					v-bind="item"
-					@update:modalValue="updateItemValue(index, $event)" 
-				/>
-				<component v-else
+				<component
 					:is="components[item.component]"
 					:id="'component-' + index"
 					v-bind="item"
-					@update:imagePreview="updateItemValue(index, $event)"
+					@update:modalValue="updateItemValue(index, $event)"
 				/>
 				<!-- Hover Icons -->
 				<div class="absolute -top-3 -right-8 hidden group-hover:flex space-x-2">
@@ -147,13 +141,12 @@
 	// Updated updateItemValue method
 	const updateItemValue = (index, value) => {
 		if (droppedItems.value[index]) {
+			console.log(droppedItems);
 			// Update the specific item with the new value
 			const item = droppedItems.value[index];
-			if (item.component === "TextField") {
-				item.modalValue = value;
-			} else if (item.component === "ImageField") {
-				item.imagePreview = value;
-			}
+			item.id = value.id;
+			item.modalValue = value.value;
+			item.classValue = value.class;
 		}
 	};
 </script>

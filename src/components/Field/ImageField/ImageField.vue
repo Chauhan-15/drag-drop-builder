@@ -3,7 +3,7 @@
 		<!-- Image Preview -->
 		<div :class="classData" @click="openModal">
 			<div class="w-28 h-28 overflow-hidden">
-				<img v-if="imagePreview" :src="imagePreview" alt="Selected Preview" class="w-full h-full object-cover" />
+				<img v-if="modalValue" :src="modalValue" alt="Selected Preview" class="w-full h-full object-cover" />
 				<img v-else :src="placeholderImage" alt="Placeholder" class="w-full h-full object-cover" />
 			</div>
 		</div>
@@ -50,7 +50,7 @@ export default {
 			type: String,
 			default: 'cursor-pointer group flex flex-col items-center'
 		},
-		imagePreview: {
+		modalValue: {
 			type: String,
 			default: '/icons/placeholder-image.png',
 		},
@@ -79,8 +79,8 @@ export default {
 					this.temporarySelection = e.target.result;
 					this.uploadImage = e.target.result;
 					this.selectedIndex = null;
-					// Emit the new imagePreview value to parent
-					this.$emit("update:imagePreview", e.target.result);
+					// Emit the new modalValue value to parent
+					this.$emit("update:modalValue", {id: this.id, value: e.target.result, class: this.classData} );
 				};
 				reader.readAsDataURL(file);
 			}
@@ -91,8 +91,8 @@ export default {
         selectPredefinedImage(index) {
             this.selectedIndex = index;
             this.temporarySelection = this.predefinedImages[index];
-            // Emit the updated imagePreview value to parent
-            this.$emit("update:imagePreview", this.predefinedImages[index]);
+            // Emit the updated modalValue value to parent
+            this.$emit("update:modalValue", {id: this.id, value: this.predefinedImages[index], class: this.classData} );
         },
 		cancelSelection() {
 			this.isModalOpen = false;
@@ -101,8 +101,8 @@ export default {
 		},
 		finalizeSelection() {
 			if (this.temporarySelection) {
-				// Emit the finalized imagePreview value to parent
-				this.$emit("update:imagePreview", this.temporarySelection);
+				// Emit the finalized modalValue value to parent
+				this.$emit("update:modalValue", {id: this.id, value: this.temporarySelection, class: this.classData} );
 			}
 			this.isModalOpen = false;
 		},

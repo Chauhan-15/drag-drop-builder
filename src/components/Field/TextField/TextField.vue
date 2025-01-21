@@ -46,7 +46,7 @@
                 },
                 set(newValue) {
                     // Emit updated value
-                    this.$emit("update:modalValue", newValue);
+                    this.$emit("update:modalValue", {id: this.id, value: newValue, class: this.classData});
                 },
             },
         },
