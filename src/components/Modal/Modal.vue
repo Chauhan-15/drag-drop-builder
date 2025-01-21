@@ -1,0 +1,27 @@
+<template>
+    <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+        <div class="bg-white rounded-lg p-6 shadow-lg relative">
+            <!-- Close Button -->
+            <button
+                class="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
+                @click="$emit('update:isOpen', false)"
+            >
+                ✕
+            </button>
+            <!-- Modal Content -->
+            <slot></slot>
+        </div>
+    </div>
+</template>
+
+<script>
+export default {
+    name: "Modal",
+    props: {
+        isOpen: {
+            type: Boolean,
+            required: true,
+        },
+    },
+};
+</script>
