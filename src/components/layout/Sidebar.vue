@@ -17,9 +17,9 @@
                     </div>
                     <!-- Submenu (Appears below the menu item with animation) -->
                     <transition name="submenu">
-                        <div v-if="openedSubMenuIndex === index" class="w-full bg-sidebar text-title">
+                        <div v-if="openedSubMenuIndex === index" class="w-full bg-sidebar text-title submenu">
                             <!-- Submenu List -->
-                            <ul class="">
+                            <ul>
                                 <li 
                                     v-for="(submenu, subIndex) in item.subMenu" 
                                     :key="subIndex" 
