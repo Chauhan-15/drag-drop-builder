@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-header text-title p-4 sm:p-6 flex justify-between items-center fixed w-screen shadow-md">
+    <div class="bg-header text-title p-4 z-50 sm:p-6 flex justify-between items-center fixed w-screen shadow-md">
         <div class="flex items-center space-x-2">
             <!-- Toggle Button Visible on Small Screens -->
             <img 

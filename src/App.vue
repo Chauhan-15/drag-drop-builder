@@ -2,7 +2,7 @@
 	<Header @toggle-sidebar="toggleSidebar" />
 	<div class="pt-[4.6rem] sm:pt-[5.8rem] flex">
 		<Sidebar :is-sidebar-open="isSidebarOpen" />
-		<div class="sm:ml-56 py-8 w-full flex flex-col items-center justify-center">
+		<div class="sm:ml-56 py-8 w-full flex flex-col items-center relative justify-center">
 			<HomePage />
 		</div>
 	</div>

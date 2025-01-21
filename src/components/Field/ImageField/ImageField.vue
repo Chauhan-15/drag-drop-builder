@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<!-- Image Preview -->
-		<div :class="classData" @click="openModal">
+		<div :class="[classData, item.verticalAlignment]" @click="openModal">
 			<div class="w-28 h-28 overflow-hidden">
 				<img v-if="modalValue" :src="modalValue" alt="Selected Preview" class="w-full h-full object-cover" />
 				<img v-else :src="placeholderImage" alt="Placeholder" class="w-full h-full object-cover" />
@@ -48,12 +48,16 @@ export default {
 		},
 		classData: {
 			type: String,
-			default: 'cursor-pointer group flex flex-col items-center'
+			default: 'cursor-pointer group flex flex-col'
 		},
 		modalValue: {
 			type: String,
 			default: '/icons/placeholder-image.png',
 		},
+		item: {
+            type: Object,
+            required: true,
+        }
 	},
 	data() {
 		return {
@@ -80,7 +84,7 @@ export default {
 					this.uploadImage = e.target.result;
 					this.selectedIndex = null;
 					// Emit the new modalValue value to parent
-					this.$emit("update:modalValue", {id: this.id, value: e.target.result, class: this.classData} );
+					this.$emit("update:modalValue", {id: this.id, value: e.target.result} );
 				};
 				reader.readAsDataURL(file);
 			}
@@ -92,7 +96,7 @@ export default {
             this.selectedIndex = index;
             this.temporarySelection = this.predefinedImages[index];
             // Emit the updated modalValue value to parent
-            this.$emit("update:modalValue", {id: this.id, value: this.predefinedImages[index], class: this.classData} );
+            this.$emit("update:modalValue", {id: this.id, value: this.predefinedImages[index]} );
         },
 		cancelSelection() {
 			this.isModalOpen = false;
@@ -102,7 +106,7 @@ export default {
 		finalizeSelection() {
 			if (this.temporarySelection) {
 				// Emit the finalized modalValue value to parent
-				this.$emit("update:modalValue", {id: this.id, value: this.temporarySelection, class: this.classData} );
+				this.$emit("update:modalValue", {id: this.id, value: this.temporarySelection} );
 			}
 			this.isModalOpen = false;
 		},
