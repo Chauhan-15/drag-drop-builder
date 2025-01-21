@@ -11,9 +11,17 @@
 				:class="{'border border-gray-400 border-dashed': draggingOverIndex === index}" 
 			>
 				<!-- Render the component with dynamic props -->
-				<component 
+				<component v-if="item.component === 'TextField'"
 					:is="components[item.component]" 
 					:id="'component-' + index" 
+					v-bind="item"
+					@update:modalValue="updateItemValue(index, $event)" 
+				/>
+				<component v-else
+					:is="components[item.component]"
+					:id="'component-' + index"
+					v-bind="item"
+					@update:imagePreview="updateItemValue(index, $event)"
 				/>
 				<!-- Hover Icons -->
 				<div class="absolute -top-3 -right-8 hidden group-hover:flex space-x-2">
@@ -67,33 +75,6 @@
 	// Track the index of the item being dragged over
 	const draggingOverIndex = ref(null);
   
-	// Handle the drop event for the workspace
-	const onDropWorkspace = (event) => {
-		event.preventDefault();
-
-		const data = event.dataTransfer.getData("application/json");
-
-		if (data) {
-			try {
-			const droppedItem = JSON.parse(data);
-
-			// Check if the component is already in the droppedItems
-			if (droppedItem && droppedItem.component && components[droppedItem.component]) {
-				// Avoid adding the same component if it's already in the droppedItems
-				const existingItemIndex = droppedItems.value.findIndex(item => item.component === droppedItem.component);
-				if (existingItemIndex === -1) {
-					droppedItems.value.push(droppedItem);
-				}
-			} else {
-				console.error("Invalid component data in drop event:", droppedItem);
-			}
-			} catch (e) {
-				console.error("Error parsing dropped data:", e);
-			}
-		} else {
-			console.error("No data found in drop event.");
-		}
-	};
 	// Allow the drop by preventing the default behavior
 	const onDragOverWorkspace = (event) => {
 		event.preventDefault(); // Necessary to allow dropping
@@ -135,5 +116,44 @@
 	const onDelete = (index) => {
 		droppedItems.value.splice(index, 1);
 	};
+	// Updated onDropWorkspace method
+	const onDropWorkspace = (event) => {
+		event.preventDefault();
+		const data = event.dataTransfer.getData("application/json");
+		if (data) {
+			try {
+				const droppedItem = JSON.parse(data);
+				// Check if the component is valid and if it's a valid object for the component
+				if (droppedItem && droppedItem.component && components[droppedItem.component]) {
+					// Initialize the component with the correct data
+					if (droppedItem.component === "ImageField" && droppedItem.imagePreview) {
+						droppedItem.imagePreview = droppedItem.imagePreview || '/icons/placeholder-image.png';
+					} else if (droppedItem.component === "TextField" && droppedItem.modalValue) {
+						droppedItem.modalValue = droppedItem.modalValue || "Welcome to drag-drop builder";
+					}
+					// Avoid adding duplicate components
+					const existingItemIndex = droppedItems.value.findIndex(item => item.component === droppedItem.component);
+					if (existingItemIndex === -1) {
+						droppedItems.value.push(droppedItem);
+					}
+				}
+			} catch (e) {
+				console.error("Error parsing dropped data:", e);
+			}
+		} else {
+			console.error("No data found in drop event.");
+		}
+	};
+	// Updated updateItemValue method
+	const updateItemValue = (index, value) => {
+		if (droppedItems.value[index]) {
+			// Update the specific item with the new value
+			const item = droppedItems.value[index];
+			if (item.component === "TextField") {
+				item.modalValue = value;
+			} else if (item.component === "ImageField") {
+				item.imagePreview = value;
+			}
+		}
+	};
 </script>
-  
