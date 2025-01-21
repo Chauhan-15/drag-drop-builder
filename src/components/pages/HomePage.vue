@@ -1,14 +1,22 @@
 <template>
-	<div class="h-full border rounded-md w-1/2 p-4" :class="{'border-gray-400 border-dashed': droppedItems.length === 0, 'border-gray-200 shadow-md': droppedItems.length > 0}" @dragover="onDragOverWorkspace" @drop="onDropWorkspace">
+	<div
+		class="h-full border rounded-md w-1/2 p-4"
+		:class="{
+			'border-gray-400 border-dashed': droppedItems.length === 0,
+			'border-gray-200 shadow-md': droppedItems.length > 0
+		}"
+		@dragover="onDragOverWorkspace"
+		@drop="onDropWorkspace"
+	>
 		<div v-if="droppedItems.length > 0">
 			<!-- Render the dynamically dropped components -->
-			<div 
-				v-for="(item, index) in droppedItems" 
-				:key="index" 
-				class="relative group p-2 rounded-md"
-				@dragover="onDragOverItem(index, $event)" 
+			<div
+				v-for="(item, index) in droppedItems"
+				:key="index"
+				class="relative group p-2 rounded-md transition-all duration-300"
+				@dragover="onDragOverItem(index, $event)"
 				@drop="onDropItem(index, $event)"
-				:class="[{'border border-gray-400 border-dashed': draggingOverIndex === index}]" 
+				:class="[{ 'border border-gray-400 border-dashed': draggingOverIndex === index }]"
 			>
 				<!-- Render the component with dynamic props -->
 				<component
@@ -16,35 +24,39 @@
 					:id="'component-' + index"
 					v-bind="item"
 					@update:modalValue="updateItemValue(index, $event)"
-					:item="droppedItems[index]" 
+					:item="droppedItems[index]"
 				/>
 				<!-- Hover Icons -->
 				<div class="absolute -top-3 -right-8 hidden group-hover:flex space-x-2">
-					<div 
+					<div
 						class="p-1 border border-sidebar-hover cursor-pointer shadow bg-white"
 						@click="moveUp(index)"
 						title="Move Up"
+						aria-label="Move item up"
 					>
 						<img src="/icons/move-up.png" alt="move-up" class="w-5 h-5">
 					</div>
-					<div 
+					<div
 						class="p-1 border border-sidebar-hover cursor-pointer shadow bg-white"
 						@click="moveDown(index)"
 						title="Move Down"
+						aria-label="Move item down"
 					>
 						<img src="/icons/move-down.png" alt="move-down" class="w-5 h-5">
 					</div>
-					<div 
+					<div
 						class="p-1 border border-sidebar-hover cursor-pointer shadow bg-white"
 						@click="openEditModal(index)"
 						title="Edit"
+						aria-label="Edit item"
 					>
 						<img src="/icons/edit.png" alt="edit" class="w-5 h-5">
 					</div>
-					<div 
+					<div
 						class="p-1 border border-sidebar-hover cursor-pointer shadow bg-white"
 						@click="onDelete(index)"
 						title="Delete"
+						aria-label="Delete item"
 					>
 						<img src="/icons/delete.png" alt="delete" class="w-5 h-5">
 					</div>
@@ -57,18 +69,18 @@
 		</div>
 	</div>
 	<!-- Bottom Modal for each item -->
-	<BottomModal 
-		v-if="droppedItems.length > 0 && activeModalIndex !== null" 
-			:key="activeModalIndex"
-			:index="activeModalIndex" 
-			:item="droppedItems[activeModalIndex]" 
-			:isOpen="activeModalIndex !== null" 
-			@update:modalValue="updateItemStyleValue(activeModalIndex, $event)"
-			ref="modal" 
+	<BottomModal
+		v-if="droppedItems.length > 0 && activeModalIndex !== null"
+		:key="activeModalIndex"
+		:index="activeModalIndex"
+		:item="droppedItems[activeModalIndex]"
+		:isOpen="activeModalIndex !== null"
+		@update:modalValue="updateItemStyleValue(activeModalIndex, $event)"
+		ref="modal"
 	/>
-</template>
+  </template>
   
-<script setup>
+  <script setup>
 	import { ref } from 'vue';
 	
 	// Import the draggable components
@@ -86,8 +98,8 @@
 	// Track the dropped items
 	const droppedItems = ref([]);
 	const draggingOverIndex = ref(null);
-	const activeModalIndex = ref(null); 
-
+	const activeModalIndex = ref(null);
+	
 	// Allow the drop by preventing the default behavior
 	const onDragOverWorkspace = (event) => {
 		event.preventDefault(); // Necessary to allow dropping
@@ -130,37 +142,33 @@
 		droppedItems.value.splice(index, 1);
 		activeModalIndex.value = 0;
 	};
-	// Updated onDropWorkspace method
+	// Handle the workspace drop action
 	const onDropWorkspace = (event) => {
 		event.preventDefault();
-		const data = event.dataTransfer.getData("application/json");
+		const data = event.dataTransfer.getData('application/json');
 		if (data) {
 			try {
 				const droppedItem = JSON.parse(data);
-				// Check if the component is valid and if it's a valid object for the component
 				if (droppedItem && droppedItem.component && components[droppedItem.component]) {
-					// Initialize the component with the correct data
-					if (droppedItem.component === "ImageField" && droppedItem.imagePreview) {
-						droppedItem.imagePreview = droppedItem.imagePreview || '/icons/placeholder-image.png';
-					} else if (droppedItem.component === "TextField" && droppedItem.modalValue) {
-						droppedItem.modalValue = droppedItem.modalValue || "Welcome to drag-drop builder";
+					if (droppedItem.component === 'ImageField' && !droppedItem.imagePreview) {
+						droppedItem.imagePreview = '/icons/placeholder-image.png';
+					} else if (droppedItem.component === 'TextField' && !droppedItem.modalValue) {
+						droppedItem.modalValue = 'Welcome to drag-drop builder';
 					}
-					// Avoid adding duplicate components
-					const existingItemIndex = droppedItems.value.findIndex(item => item.component === droppedItem.component);
+					const existingItemIndex = droppedItems.value.findIndex(item => item.component === droppedItem.component && item.id === droppedItem.id);
 					if (existingItemIndex === -1) {
 						droppedItems.value.push(droppedItem);
 					}
 				}
 			} catch (e) {
-				console.error("Error parsing dropped data:", e);
+				console.error('Error parsing dropped data:', e);
 			}
 		} else {
-			console.error("No data found in drop event.");
+			console.error('No data found in drop event.');
 		}
 	};
 	const updateItemValue = (index, value) => {
 		if (droppedItems.value[index]) {
-			// Update the specific item with the new value
 			const item = droppedItems.value[index];
 			item.id = value.id;
 			item.modalValue = value.value;
@@ -169,12 +177,12 @@
 	const updateItemStyleValue = (index, value) => {
 		if (droppedItems.value[index]) {
 			const updatedItem = { ...droppedItems.value[index], ...value };
-			droppedItems.value[index] = updatedItem; // Replace the object to ensure reactivity
+			droppedItems.value[index] = updatedItem;
 		}
 	};
 	const openEditModal = (index) => {
 		if (index >= 0 && index < droppedItems.value.length) {
-			activeModalIndex.value = index; // Open the modal for the specific item
+			activeModalIndex.value = index;
 		}
 	};
-</script>
+  </script>

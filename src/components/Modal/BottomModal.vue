@@ -135,6 +135,8 @@
         openModal,
         closeModal
     });
+
+    // handle style dynamicaaly
     const emit = defineEmits();
     const updateAlignment = (alignment) => {
         if (!item) return;

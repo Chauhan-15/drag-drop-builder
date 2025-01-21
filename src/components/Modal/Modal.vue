@@ -5,9 +5,8 @@
             <button
                 class="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
                 @click="$emit('update:isOpen', false)"
-            >
-                ✕
-            </button>
+                aria-label="Close modal"
+            >✕</button>
             <!-- Modal Content -->
             <slot></slot>
         </div>
@@ -15,13 +14,13 @@
 </template>
 
 <script>
-export default {
-    name: "Modal",
-    props: {
+    export default {
+        name: "Modal",
+        props: {
         isOpen: {
             type: Boolean,
             required: true,
         },
-    },
-};
+        },
+    };
 </script>

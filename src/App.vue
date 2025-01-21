@@ -9,16 +9,16 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import Header from './components/layout/Header.vue'
-import Sidebar from './components/layout/Sidebar.vue'
-import HomePage from './components/pages/HomePage.vue'
+	import { ref } from 'vue'
+	import Header from './components/layout/Header.vue'
+	import Sidebar from './components/layout/Sidebar.vue'
+	import HomePage from './components/pages/HomePage.vue'
 
-// Track the sidebar's visibility
-const isSidebarOpen = ref(false)
+	// Track the sidebar's visibility
+	const isSidebarOpen = ref(false)
 
-// Toggle sidebar visibility
-const toggleSidebar = () => {
-  isSidebarOpen.value = !isSidebarOpen.value
-}
+	// Toggle sidebar visibility
+	const toggleSidebar = () => {
+		isSidebarOpen.value = !isSidebarOpen.value
+	}
 </script>

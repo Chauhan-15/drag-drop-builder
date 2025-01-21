@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<!-- Image Preview -->
-		<div :class="[classData, item.verticalAlignment]" @click="openModal">
+		<div :class="['cursor-pointer group flex flex-col', item.verticalAlignment]" @click="openModal">
 			<div class="w-28 h-28 overflow-hidden">
 				<img v-if="modalValue" :src="modalValue" alt="Selected Preview" class="w-full h-full object-cover" />
 				<img v-else :src="placeholderImage" alt="Placeholder" class="w-full h-full object-cover" />
@@ -34,82 +34,78 @@
 </template>
 
 <script>
-import Modal from '../../Modal/Modal.vue'; // Import Modal component
+	import Modal from '../../Modal/Modal.vue';
 
-export default {
-	name: "ImageField",
-	components: {
-		Modal,
-	},
-	props: {
-		id: {
-			type: String,
-			required: true,
+	export default {
+		name: "ImageField",
+		components: {
+			Modal,
 		},
-		classData: {
-			type: String,
-			default: 'cursor-pointer group flex flex-col'
-		},
-		modalValue: {
-			type: String,
-			default: '/icons/placeholder-image.png',
-		},
-		item: {
-            type: Object,
-            required: true,
-        }
-	},
-	data() {
-		return {
-			isModalOpen: false,
-			placeholderImage: '/icons/placeholder-image.png',
-			uploadImage: null,
-			predefinedImages: [
-				'/images/pic1.png',
-				'/images/pic2.png',
-				'/images/pic3.png',
-				'/images/pic4.png',
-			],
-			selectedIndex: null,
-			temporarySelection: null,
-		};
-	},
-	methods: {
-		onFileChange(event) {
-			const file = event.target.files[0];
-			if (file) {
-				const reader = new FileReader();
-				reader.onload = (e) => {
-					this.temporarySelection = e.target.result;
-					this.uploadImage = e.target.result;
-					this.selectedIndex = null;
-					// Emit the new modalValue value to parent
-					this.$emit("update:modalValue", {id: this.id, value: e.target.result} );
-				};
-				reader.readAsDataURL(file);
+		props: {
+			id: {
+				type: String,
+				required: true,
+			},
+			modalValue: {
+				type: String,
+				default: '/icons/placeholder-image.png',
+			},
+			item: {
+				type: Object,
+				required: true,
 			}
 		},
-		openModal() {
-			this.isModalOpen = true;
+		data() {
+			return {
+				isModalOpen: false,
+				placeholderImage: '/icons/placeholder-image.png',
+				uploadImage: null,
+				predefinedImages: [
+					'/images/pic1.png',
+					'/images/pic2.png',
+					'/images/pic3.png',
+					'/images/pic4.png',
+				],
+				selectedIndex: null,
+				temporarySelection: null,
+			};
 		},
-        selectPredefinedImage(index) {
-            this.selectedIndex = index;
-            this.temporarySelection = this.predefinedImages[index];
-            // Emit the updated modalValue value to parent
-            this.$emit("update:modalValue", {id: this.id, value: this.predefinedImages[index]} );
-        },
-		cancelSelection() {
-			this.isModalOpen = false;
-			this.selectedIndex = null;
-			this.temporarySelection = null;
+		methods: {
+			onFileChange(event) {
+				const file = event.target.files[0];
+				if (file) {
+					const reader = new FileReader();
+					reader.onload = (e) => {
+						this.temporarySelection = e.target.result;
+						this.uploadImage = e.target.result;
+						this.selectedIndex = null;
+						// Emit the new modalValue value to parent
+						this.$emit("update:modalValue", {id: this.id, value: e.target.result} );
+					};
+					reader.readAsDataURL(file);
+				}
+			},
+			openModal() {
+				this.isModalOpen = true;
+			},
+			selectPredefinedImage(index) {
+				this.selectedIndex = index;
+				this.temporarySelection = this.predefinedImages[index];
+				// Emit the updated modalValue value to parent
+				this.$emit("update:modalValue", {id: this.id, value: this.predefinedImages[index]} );
+			},
+			cancelSelection() {
+				this.isModalOpen = false;
+				this.selectedIndex = null;
+				this.temporarySelection = null;
+			},
+			finalizeSelection() {
+				if (this.temporarySelection) {
+					// Emit the finalized modalValue value to parent
+					this.$emit("update:modalValue", {id: this.id, value: this.temporarySelection} );
+				}
+				this.isModalOpen = false;
+			},
 		},
-		finalizeSelection() {
-			if (this.temporarySelection) {
-				// Emit the finalized modalValue value to parent
-				this.$emit("update:modalValue", {id: this.id, value: this.temporarySelection} );
-			}
-			this.isModalOpen = false;
-		},
-	},
-};
+	};
 </script>

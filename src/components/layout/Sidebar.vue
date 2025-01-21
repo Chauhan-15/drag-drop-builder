@@ -45,52 +45,51 @@
 </template>
 
 <script>
-import TextField from "../Preview/Text/TextField.vue";
-import ImageField from "../Preview/Image/ImageField.vue";
+    import TextField from "../Preview/Text/TextField.vue";
+    import ImageField from "../Preview/Image/ImageField.vue";
 
-export default {
-    components: {
-        TextField,
-        ImageField,
-    },
-    props: {
-        isSidebarOpen: {
-            type: Boolean,
-            default: false,
+    export default {
+        components: {
+            TextField,
+            ImageField,
         },
-    },
-    data() {
-        return {
-            openedSubMenuIndex: null, 
-            menuItems: [
-                {
-                    label: "Text",
-                    icon: "/icons/text.png",
-                    subMenu: [
-                        { label: "text", component: "TextField" },
-                    ],
-                },
-                {
-                    label: "Image",
-                    icon: "/icons/image.png",
-                    subMenu: [
-                        { label: "image", component: "ImageField" },
-                    ],
-                },
-            ],
-        };
-    },
-    methods: {
-        toggleSubMenu(index) {
-            this.openedSubMenuIndex = this.openedSubMenuIndex === index ? null : index;
+        props: {
+            isSidebarOpen: {
+                type: Boolean,
+                default: false,
+            },
         },
-
-        onDragStart(submenu) {
-            const dragData = JSON.stringify({
-                component: submenu.component,
-            });
-            event.dataTransfer.setData("application/json", dragData);
+        data() {
+            return {
+                openedSubMenuIndex: null, 
+                menuItems: [
+                    {
+                        label: "Text",
+                        icon: "/icons/text.png",
+                        subMenu: [
+                            { label: "text", component: "TextField" },
+                        ],
+                    },
+                    {
+                        label: "Image",
+                        icon: "/icons/image.png",
+                        subMenu: [
+                            { label: "image", component: "ImageField" },
+                        ],
+                    },
+                ],
+            };
         },
-    },
-};
+        methods: {
+            toggleSubMenu(index) {
+                this.openedSubMenuIndex = this.openedSubMenuIndex === index ? null : index;
+            },
+            onDragStart(submenu) {
+                const dragData = JSON.stringify({
+                    component: submenu.component,
+                });
+                event.dataTransfer.setData("application/json", dragData);
+            },
+        },
+    };
 </script>
