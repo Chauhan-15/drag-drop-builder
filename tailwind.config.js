@@ -7,14 +7,14 @@ export default {
     theme: {
 		extend: {
 			colors: {
-				'header': '#FFFDF0',
-				'primary-button': '#2563EB',
-				'secondary-button': '#FFF2C2',
-				'sidebar': '#D9DFC6',
-				'sidebar-hover': '#EFF3EA',
-				'background': '#F9FAFB',
-				'title': '#4C585B'
-
+				'header': '#0C0A09',
+				'primary-button': '#FF6500',
+				'secondary-button': '#EDE8DC',
+				'sidebar': '#171411',
+				'sidebar-hover': '#A8998A',
+				'select-button': '#FFE7D6',
+				'modal': '#231F1A',
+				'title': '#FFFFFF'
 			}
 		},
     },

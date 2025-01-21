@@ -14,20 +14,15 @@
 				<!-- Predefined Images Section -->
 				<div v-for="(image, index) in predefinedImages" :key="index" @click="selectPredefinedImage(index)" 
 					class="relative cursor-pointer flex flex-col items-center w-20 h-20 overflow-hidden rounded-md border-2 p-1"
-					:class="{ 'border-blue-500 shadow-lg': selectedIndex === index, 'border-gray-300': selectedIndex !== index }">
+					:class="{ 'border-primary-button shadow-lg': selectedIndex === index, 'border-gray-300': selectedIndex !== index }">
 					<img :src="image" alt="Predefined Image" class="w-full h-full object-cover" />
 				</div>
 				<!-- Upload Option -->
 				<label :for="id" class="cursor-pointer flex flex-col justify-center items-center border border-dashed rounded-md border-gray-400 p-1 w-20 h-20">
 					<img v-if="uploadImage" :src="uploadImage" alt="Predefined Image" class="w-full h-full object-cover" />
-					<img v-else class="w-6 h-6" src="/icons/plus.png" alt="plus" />
+					<img v-else class="w-6 h-6" src="/icons/form/plus.png" alt="plus" />
 					<input :id="id" type="file" accept="image/*" @change="onFileChange" class="hidden" />
 				</label>
-			</div>
-			<!-- Modal Buttons -->
-			<div class="flex justify-end space-x-2">
-				<button @click="cancelSelection" class="px-4 py-2 bg-white border border-gray-200 text-title font-semibold rounded-md hover:shadow-md">Cancel</button>
-				<button @click="finalizeSelection" class="px-4 py-2 bg-secondary-button text-title font-semibold rounded-md hover:shadow-md">Select</button>
 			</div>
 		</Modal>
 	</div>
@@ -93,11 +88,6 @@
 				this.temporarySelection = this.predefinedImages[index];
 				// Emit the updated modalValue value to parent
 				this.$emit("update:modalValue", {id: this.id, value: this.predefinedImages[index]} );
-			},
-			cancelSelection() {
-				this.isModalOpen = false;
-				this.selectedIndex = null;
-				this.temporarySelection = null;
 			},
 			finalizeSelection() {
 				if (this.temporarySelection) {

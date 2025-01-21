@@ -1,97 +1,101 @@
 <template>
-    <div v-if="isOpen" class="sm:ml-56 fixed bottom-0 left-0 w-screen bg-header p-4 transition-all duration-300" :class="{'h-24': !isExpanded, 'h-72': isExpanded}">
+    <div v-if="isOpen" class="sm:ml-56 fixed bottom-0 left-0 w-screen bg-modal p-4 transition-all duration-300" :class="{'h-16': !isExpanded, 'h-max': isExpanded}">
         <!-- Arrow Icon to drag the modal down -->
-        <div @click="toggleModal" class="flex justify-center mb-4 cursor-pointer">
+        <div @click="toggleModal" class="flex justify-center cursor-pointer">
             <img v-if="isExpanded" src="/icons/down-arrow.png" alt="drag down" class="w-6 h-6">
             <img v-else src="/icons/up-arrow.png" alt="drag up" class="w-6 h-6">
         </div>
-        <div v-if="isExpanded">
+        <div v-if="isExpanded" class=" max-h-60 overflow-scroll">
             <!-- for text -->
-            <div v-if="item.component === 'TextField'" class="grid grid-cols-2 gap-4">
-                <div class="space-y-2">
+            <div v-if="item.component === 'TextField'" class="sm:grid sm:grid-cols-2 sm:gap-4 py-4 space-y-2 sm:space-y-0">
+                <div class="space-y-1 sm:space-y-2">
                     <h1 class="capitalize text-title font-bold">text alignment</h1>
-                    <div class="space-x-6">
+                    <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
                         <button
-                            :class="['border-gray-200', item.textAlignment === 'text-left' ? 'bg-gray-300' : '', 'py-2 px-6 border rounded-md']"
+                            :class="[item.textAlignment === 'text-left' ? 'bg-primary-button text-white' : 'bg-select-button text-sidebar', 'py-2 px-6 rounded-md capitalize']"
                             @click="updateAlignment('text-left')"
                         >left</button>
                         <button
-                            :class="['border-gray-200', item.textAlignment === 'text-center' ? 'bg-gray-300' : '', 'py-2 px-6 border rounded-md']"
+                            :class="[item.textAlignment === 'text-center' ? 'bg-primary-button text-white' : 'bg-select-button text-sidebar', 'py-2 px-6 rounded-md capitalize']"
                             @click="updateAlignment('text-center')"
                         >center</button>
                         <button
-                            :class="['border-gray-200', item.textAlignment === 'text-right' ? 'bg-gray-300' : '', 'py-2 px-6 border rounded-md']"
+                            :class="[item.textAlignment === 'text-right' ? 'bg-primary-button text-white' : 'bg-select-button text-sidebar', 'py-2 px-6 rounded-md capitalize']"
                             @click="updateAlignment('text-right')"
                         >right</button>
                     </div>
                 </div>
-                <div class="space-y-2">
+                <div class="space-y-1 sm:space-y-2">
                     <h1 class="capitalize text-title font-bold">text size</h1>
-                    <div class="space-x-6">
+                    <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
                         <button
-                            :class="['border-gray-200', item.textSize === 'text-sm' ? 'bg-gray-300' : '', 'py-2 px-6 border rounded-md']"
+                            :class="[item.textSize === 'text-sm' ? 'bg-primary-button text-white' : 'bg-select-button text-sidebar', 'py-2 px-6 rounded-md capitalize']"
                             @click="updateSize('text-sm')"
                         >small</button>
                         <button
-                            :class="['border-gray-200', item.textSize === 'text-base' ? 'bg-gray-300' : '', 'py-2 px-6 border rounded-md']"
+                            :class="[item.textSize === 'text-base' ? 'bg-primary-button text-white' : 'bg-select-button text-sidebar', 'py-2 px-6 rounded-md capitalize']"
                             @click="updateSize('text-base')"
                         >medium</button>
                         <button
-                            :class="['border-gray-200', item.textSize === 'text-lg' ? 'bg-gray-300' : '', 'py-2 px-6 border rounded-md']"
+                            :class="[item.textSize === 'text-lg' ? 'bg-primary-button text-white' : 'bg-select-button text-sidebar', 'py-2 px-6 rounded-md capitalize']"
                             @click="updateSize('text-lg')"
                         >large</button> 
+                        <button
+                            :class="[item.textSize === 'text-xl' ? 'bg-primary-button text-white' : 'bg-select-button text-sidebar', 'py-2 px-6 rounded-md capitalize']"
+                            @click="updateSize('text-xl')"
+                        >extra large</button> 
                     </div>
                 </div>
-                <div class="space-y-2">
+                <div class="space-y-1 sm:space-y-2">
                     <h1 class="capitalize text-title font-bold">font weight</h1>
-                    <div class="space-x-6">
+                    <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
                         <button
-                            :class="['border-gray-200', item.fontWeight === 'font-normal' ? 'bg-gray-300' : '', 'py-2 px-6 border rounded-md']"
+                            :class="[item.fontWeight === 'font-normal' ? 'bg-primary-button text-white' : 'bg-select-button text-sidebar', 'py-2 px-6 rounded-md capitalize']"
                             @click="updateFont('font-normal')"
                         >normal</button>
                         <button
-                            :class="['border-gray-200', item.fontWeight === 'font-medium' ? 'bg-gray-300' : '', 'py-2 px-6 border rounded-md']"
+                            :class="[item.fontWeight === 'font-medium' ? 'bg-primary-button text-white' : 'bg-select-button text-sidebar', 'py-2 px-6 rounded-md capitalize']"
                             @click="updateFont('font-medium')"
                         >medium</button>
                         <button
-                            :class="['border-gray-200', item.fontWeight === 'font-semibold' ? 'bg-gray-300' : '', 'py-2 px-6 border rounded-md']"
+                            :class="[item.fontWeight === 'font-semibold' ? 'bg-primary-button text-white' : 'bg-select-button text-sidebar', 'py-2 px-6 rounded-md capitalize']"
                             @click="updateFont('font-semibold')"
                         >semibold</button>
                         <button
-                            :class="['border-gray-200', item.fontWeight === 'font-bold' ? 'bg-gray-300' : '', 'py-2 px-6 border rounded-md']"
+                            :class="[item.fontWeight === 'font-bold' ? 'bg-primary-button text-white' : 'bg-select-button text-sidebar', 'py-2 px-6 rounded-md capitalize']"
                             @click="updateFont('font-bold')"
                         >bold</button>
                     </div>
                 </div>
-                <div class="space-y-2">
+                <div class="space-y-1 sm:space-y-2">
                     <h1 class="capitalize text-title font-bold">font style</h1>
-                    <div class="space-x-6">
+                    <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
                         <button
-                            :class="['border-gray-200', item.fontStyle === 'underline' ? 'bg-gray-300' : '', 'py-2 px-6 border rounded-md']"
+                            :class="[item.fontStyle === 'underline' ? 'bg-primary-button text-white' : 'bg-select-button text-sidebar', 'py-2 px-6 rounded-md capitalize']"
                             @click="updateStyle('underline')"
                         >underline</button>
                         <button
-                            :class="['border-gray-200', item.fontStyle === 'italic' ? 'bg-gray-300' : '', 'py-2 px-6 border rounded-md']"
+                            :class="[item.fontStyle === 'italic' ? 'bg-primary-button text-white' : 'bg-select-button text-sidebar', 'py-2 px-6 rounded-md capitalize']"
                             @click="updateStyle('italic')"
                         >italic</button>
                     </div>
                 </div>
             </div>
             <!-- for image -->
-            <div v-if="item.component === 'ImageField'" class="grid grid-cols-2 gap-4">
-                <div class="space-y-2">
+            <div v-if="item.component === 'ImageField'" class="sm:grid sm:grid-cols-2 sm:gap-4 py-4 space-y-2 sm:space-y-0">
+                <div class="space-y-1 sm:space-y-2">
                     <h1 class="capitalize text-title font-bold">alignment</h1>
-                    <div class="space-x-6">
+                    <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
                         <button
-                            :class="['border-gray-200', item.verticalAlignment === 'items-start' ? 'bg-gray-300' : '', 'py-2 px-6 border rounded-md']"
+                            :class="[item.verticalAlignment === 'items-start' ? 'bg-primary-button text-white' : 'bg-select-button text-sidebar', 'py-2 px-6 rounded-md capitalize']"
                             @click="updateImageAlignment('items-start')"
                         >left</button>
                         <button
-                            :class="['border-gray-200', item.verticalAlignment === 'items-center' ? 'bg-gray-300' : '', 'py-2 px-6 border rounded-md']"
+                            :class="[item.verticalAlignment === 'items-center' ? 'bg-primary-button text-white' : 'bg-select-button text-sidebar', 'py-2 px-6 rounded-md capitalize']"
                             @click="updateImageAlignment('items-center')"
                         >center</button>
                         <button
-                            :class="['border-gray-200', item.verticalAlignment === 'items-end' ? 'bg-gray-300' : '', 'py-2 px-6 border rounded-md']"
+                            :class="[item.verticalAlignment === 'items-end' ? 'bg-primary-button text-white' : 'bg-select-button text-sidebar', 'py-2 px-6 rounded-md capitalize']"
                             @click="updateImageAlignment('items-end')"
                         >right</button>
                     </div>

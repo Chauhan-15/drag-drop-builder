@@ -1,6 +1,6 @@
 <template>
-    <div class="text-field">
-        <h1 class="block text-base font-medium text-gray-700 first-letter:capitalize text-center">text block</h1>
+    <div>
+        <h1 class="block text-base font-medium text-sidebar bg-white rounded-md p-2 first-letter:capitalize text-center">text block</h1>
     </div>
 </template>
 
