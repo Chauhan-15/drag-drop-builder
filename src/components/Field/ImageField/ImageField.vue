@@ -65,6 +65,13 @@
 				temporarySelection: null,
 			};
 		},
+		watch: {
+			// Watch for changes to modalValue prop and update the selected index
+			modalValue(newVal) {
+				const index = this.predefinedImages.indexOf(newVal);
+				this.selectedIndex = index !== -1 ? index : null;
+			}
+		},
 		methods: {
 			onFileChange(event) {
 				const file = event.target.files[0];
@@ -96,6 +103,10 @@
 				}
 				this.isModalOpen = false;
 			},
+		},
+		mounted() {
+			// Initialize selectedIndex based on the initial modalValue prop
+			this.selectedIndex = this.predefinedImages.indexOf(this.modalValue);
 		},
 	};
 </script>
