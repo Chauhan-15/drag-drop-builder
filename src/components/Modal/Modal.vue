@@ -1,6 +1,6 @@
 <template>
     <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-        <div class="bg-white rounded-lg p-6 shadow-lg relative">
+        <div class="bg-white rounded-lg p-6 shadow-lg relative md:w-[36rem]">
             <!-- Close Button -->
             <button
                 class="absolute top-3 right-4 text-gray-500 hover:text-gray-800"

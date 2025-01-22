@@ -11,7 +11,7 @@
 		<template v-slot>
 			<div class="text-center">
 				<h2 class="text-xl font-semibold">Saved Items</h2>
-				<ul class="mt-4">
+				<ul class="mt-4 overflow-scroll max-h-64 ">
 					{{ JSON.stringify(savedItems) }}
 				</ul>
 			</div>
