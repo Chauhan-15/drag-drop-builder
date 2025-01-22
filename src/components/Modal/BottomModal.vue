@@ -39,6 +39,7 @@
                     <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
                         <button :class="[item.fontStyle === 'underline' ? 'bg-primary-button text-white' : 'bg-select-button text-sidebar', 'py-2 px-6 rounded-md capitalize']" @click="updateStyle('underline')">underline</button>
                         <button :class="[item.fontStyle === 'italic' ? 'bg-primary-button text-white' : 'bg-select-button text-sidebar', 'py-2 px-6 rounded-md capitalize']" @click="updateStyle('italic')">italic</button>
+                        <button :class="[item.fontStyle === '' ? 'bg-primary-button text-white' : 'bg-select-button text-sidebar', 'py-2 px-6 rounded-md capitalize']" @click="updateStyle('')">Normal</button>
                     </div>
                 </div>
             </div>
