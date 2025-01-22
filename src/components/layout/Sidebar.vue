@@ -5,30 +5,30 @@
             <ul class="space-y-2">
                 <li v-for="(item, index) in menuItems" :key="index" class="cursor-pointer group relative hover:bg-sidebar-hover">
                     <!-- Item Content -->
-                    <div @click="toggleSubMenu(index)" class="p-4 flex space-x-4 justify-between items-center">
+                    <div @click="toggleSubMenu(index)" :class="['p-4 flex space-x-4 justify-between items-center box', item.label]">
                         <div class="flex space-x-2 sm:space-x-4 items-center">
                             <img class="w-6 sm:w-8 h-6 sm:h-8" :src="item.icon" :alt="item.label" />
                             <div class="first-letter:capitalize sm:text-xl">{{ item.label }}</div>
                         </div>
                         <div>
                             <!-- Arrow rotation based on submenu state -->
-                            <img class="w-4 sm:w-5 h-4 sm:h-5 cursor-pointer transition-transform" :class="{ 'rotate-180': openedSubMenuIndex === index }" src="/icons/down-arrow.png" alt="arrow"/>
+                            <img class="w-4 sm:w-5 h-4 sm:h-5 cursor-pointer transition-transform arrow" :class="{ 'rotate-180': openedSubMenuIndex === index }" src="/icons/down-arrow.png" alt="arrow"/>
                         </div>
                     </div>
                     <!-- Submenu (Appears below the menu item with animation) -->
-                    <transition name="submenu">
+                    <transition name="submenu" class="submenu">
                         <div v-if="openedSubMenuIndex === index" class="w-full bg-sidebar text-title submenu">
                             <!-- Submenu List -->
                             <ul>
                                 <li 
                                     v-for="(submenu, subIndex) in item.subMenu" 
                                     :key="subIndex" 
-                                    class="px-4 py-2 cursor-pointer"
+                                    class="px-4 py-2 cursor-pointer label"
                                     @dragstart="onDragStart(submenu)"
                                     draggable="true"
                                 >
                                     <div class="space-y-1">
-                                        <h1 class="first-letter:capitalize text-sm">{{ submenu.label }}</h1>
+                                        <h1 class="first-letter:capitalize text-sm second">{{ submenu.label }}</h1>
                                         <div class="bg-header rounded-md p-2">
                                             <!-- Render the submenu component -->
                                             <component :is="submenu.component" />

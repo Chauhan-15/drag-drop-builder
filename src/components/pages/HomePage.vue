@@ -31,7 +31,7 @@
 				<!-- Hover Icons -->
 				<div class="absolute -top-6 sm:-top-3 -right-[0.4rem] md:-right-[5.8rem] hidden group-hover:flex space-x-2">
 					<div
-						class="p-1 border border-sidebar-hover cursor-pointer shadow bg-white"
+						class="p-1 border border-sidebar-hover cursor-pointer shadow bg-white move-up-button"
 						@click="moveUp(index)"
 						title="Move Up"
 						aria-label="Move item up"
@@ -55,7 +55,7 @@
 						<img src="/icons/form/edit.png" alt="edit" class="w-5 h-5">
 					</div>
 					<div
-						class="p-1 border border-sidebar-hover cursor-pointer shadow bg-white"
+						class="p-1 border border-sidebar-hover cursor-pointer shadow bg-white copy-button"
 						@click="copyItem(index)"
 						title="Copy"
 						aria-label="Copy item"
@@ -63,7 +63,7 @@
 						<img src="/icons/form/copy.png" alt="copy" class="w-5 h-5">
 					</div>
 					<div
-						class="p-1 border border-sidebar-hover cursor-pointer shadow bg-white"
+						class="p-1 border border-sidebar-hover cursor-pointer shadow bg-white delete-button"
 						@click="onDelete(index)"
 						title="Delete"
 						aria-label="Delete item"

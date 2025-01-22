@@ -13,12 +13,12 @@
 			<div class="grid grid-cols-2 gap-2 sm:grid-cols-5 sm:gap-8 mb-4">
 				<!-- Predefined Images Section -->
 				<div v-for="(image, index) in predefinedImages" :key="index" @click="selectPredefinedImage(index)" 
-					class="relative cursor-pointer flex flex-col items-center w-20 h-20 overflow-hidden rounded-md border-2 p-1"
+					class="relative predefined-image cursor-pointer flex flex-col items-center w-20 h-20 overflow-hidden rounded-md border-2 p-1"
 					:class="{ 'border-primary-button shadow-lg': selectedIndex === index, 'border-gray-300': selectedIndex !== index }">
 					<img :src="image" alt="Predefined Image" class="w-full h-full object-cover" />
 				</div>
 				<!-- Upload Option -->
-				<label :for="id" class="cursor-pointer flex flex-col justify-center items-center border border-dashed rounded-md border-gray-400 p-1 w-20 h-20">
+				<label :for="id" class="upload-image cursor-pointer flex flex-col justify-center items-center border border-dashed rounded-md border-gray-400 p-1 w-20 h-20">
 					<img v-if="uploadImage" :src="uploadImage" alt="Predefined Image" class="w-full h-full object-cover" />
 					<img v-else class="w-6 h-6" src="/icons/form/plus.png" alt="plus" />
 					<input :id="id" type="file" accept="image/*" @change="onFileChange" class="hidden" />
@@ -73,7 +73,7 @@
 		},
 		methods: {
 			onFileChange(event) {
-			const file = event.target.files[0];
+				const file = event.target.files[0];
 				if (file) {
 					const reader = new FileReader();
 					reader.onload = (e) => {
