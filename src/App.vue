@@ -6,26 +6,37 @@
 			<HomePage ref="homePageRef" />
 		</div>
 	</div>
+    <!-- Modal for displaying saved items -->
+	<Modal :isOpen="isModalOpen" @update:isOpen="isModalOpen = $event">
+		<template v-slot>
+			<div class="text-center">
+				<h2 class="text-xl font-semibold">Saved Items</h2>
+				<ul class="mt-4">
+					{{ JSON.stringify(savedItems) }}
+				</ul>
+			</div>
+		</template>
+	</Modal>
 </template>
-  
+
 <script>
 	import Header from './components/layout/Header.vue'
 	import Sidebar from './components/layout/Sidebar.vue'
 	import HomePage from './components/pages/HomePage.vue'
+	import Modal from './components/Modal/Modal.vue'
   
 	export default {
 		components: {
 			Header,
 			Sidebar,
-			HomePage
+			HomePage,
+			Modal
 		},
 		data() {
 			return {
-				// Track the sidebar's visibility
 				isSidebarOpen: false,
-		
-				// Create a ref to access the HomePage component
 				savedItems: [],
+				isModalOpen: false,
 			}
 		},
 		methods: {
@@ -37,8 +48,12 @@
 			saveDroppedItems() {
 				const homePageRef = this.$refs.homePageRef
 				if (homePageRef && homePageRef.droppedItems.length > 0) {
-					// Access the reactive dropped items and store them
-					this.savedItems = homePageRef.droppedItems
+					this.savedItems = homePageRef.droppedItems;
+					this.savedItems.forEach((item, index) => {
+						this.savedItems[index].position = index;
+						this.savedItems[index].id = index+1;
+					});
+					this.isModalOpen = true
 					console.log('Saved dropped items:', this.savedItems)
 				} else {
 					console.log('Please add data first')
