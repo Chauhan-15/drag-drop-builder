@@ -22,7 +22,7 @@
 			<!-- Render the component with dynamic props -->
 			<component
 				:is="components[item.component]"
-				:id="index"
+				:id="index + 1"
 				v-bind="item"
 				@update:modalValue="updateItemValue(index, $event)"
 				:item="item"
@@ -178,9 +178,9 @@
 			updateItemValue(index, value) {
 				if (this.droppedItems[index]) {
 				const item = this.droppedItems[index];
-					item.id = (value.id + 1);
+					item.id = value.id;
 					item.modalValue = value.value;
-					item.position = value.id;
+					item.position = index;
 				}
 			},
 			updateItemStyleValue(index, value) {
