@@ -196,6 +196,10 @@
 			},
 			copyItem(index) {
 				const itemToCopy = { ...this.droppedItems[index] };
+				// Generate a new unique ID
+				const newId = Math.max(...this.droppedItems.map(item => item.id)) + 1;
+				itemToCopy.id = newId;
+				// Insert the copied item into the array
 				this.droppedItems.splice(index + 1, 0, itemToCopy);
 			}
 		}
