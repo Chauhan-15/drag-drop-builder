@@ -7,32 +7,43 @@
 		</div>
 	</div>
 </template>
-
-<script setup>
-	import { ref } from 'vue'
+  
+<script>
 	import Header from './components/layout/Header.vue'
 	import Sidebar from './components/layout/Sidebar.vue'
 	import HomePage from './components/pages/HomePage.vue'
-
-	// Track the sidebar's visibility
-	const isSidebarOpen = ref(false);
-
-	// Create a ref to access the HomePage component
-	const homePageRef = ref(null)
-	const savedItems = ref([])
-
-	// Toggle sidebar visibility
-	const toggleSidebar = () => {
-		isSidebarOpen.value = !isSidebarOpen.value
-	}
-	// Handle save button click in the Header component
-	const saveDroppedItems = () => {
-		if (homePageRef.value && homePageRef.value.droppedItems.length >0) {
-			// Access the reactive dropped items and store them
-			savedItems.value = homePageRef.value.droppedItems
-			console.log('Saved dropped items:', savedItems.value)
-		} else {
-			console.log('plesae add data first')
+  
+	export default {
+		components: {
+			Header,
+			Sidebar,
+			HomePage
+		},
+		data() {
+			return {
+				// Track the sidebar's visibility
+				isSidebarOpen: false,
+		
+				// Create a ref to access the HomePage component
+				savedItems: [],
+			}
+		},
+		methods: {
+			// Toggle sidebar visibility
+			toggleSidebar() {
+				this.isSidebarOpen = !this.isSidebarOpen
+			},
+			// Handle save button click in the Header component
+			saveDroppedItems() {
+				const homePageRef = this.$refs.homePageRef
+				if (homePageRef && homePageRef.droppedItems.length > 0) {
+					// Access the reactive dropped items and store them
+					this.savedItems = homePageRef.droppedItems
+					console.log('Saved dropped items:', this.savedItems)
+				} else {
+					console.log('Please add data first')
+				}
+			}
 		}
 	}
 </script>

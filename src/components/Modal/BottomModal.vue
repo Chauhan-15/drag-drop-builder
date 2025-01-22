@@ -105,63 +105,50 @@
     </div>
 </template>
   
-<script setup>
-    import { ref } from 'vue';
-    import { defineProps } from 'vue';
-
-    // Define the props that are passed to the component
-    const { item } = defineProps({
-        item: {
-            type: Object,
-            required: true,
+<script>
+    export default {
+        name: "BottomModal",
+        props: {
+            isOpen: {
+                type: Boolean,
+                required: true,
+            },
+            item: {
+                type: Object,
+                required: true,
+            },
         },
-        index: {
-            type: Number,
-            required: true,
+        data() {
+            return {
+                isExpanded: true,
+            };
         },
-        isOpen: {
-            type: Boolean,
-            required: true
-        }
-    });
-    const isOpen = ref(true);
-    const isExpanded = ref(true);
-    const toggleModal = () => {
-        isExpanded.value = !isExpanded.value;
+        methods: {
+            toggleModal() {
+                this.isExpanded = !this.isExpanded;
+            },
+            updateAlignment(alignment) {
+                this.item.textAlignment = alignment;
+                this.$emit("update:item", this.item);
+            },
+            updateSize(size) {
+                this.item.textSize = size;
+                this.$emit("update:item", this.item);
+            },
+            updateFont(weight) {
+                this.item.fontWeight = weight;
+                this.$emit("update:item", this.item);
+            },
+            updateStyle(style) {
+                this.item.fontStyle = style;
+                this.$emit("update:item", this.item);
+            },
+            updateImageAlignment(alignment) {
+                this.item.verticalAlignment = alignment;
+                this.$emit("update:item", this.item);
+            },
+        },
     };
-    const openModal = () => {
-        isOpen.value = true;
-    };
-    const closeModal = () => {
-        isOpen.value = false;
-    };
-    defineExpose({
-        openModal,
-        closeModal
-    });
-
-    // handle style dynamicaaly
-    const emit = defineEmits();
-    const updateAlignment = (alignment) => {
-        if (!item) return;
-        emit("update:modalValue", {textAlignment: alignment});
-    };
-    const updateSize = (size) => {
-        if (!item) return;
-        emit("update:modalValue", {textSize: size});
-    };
-    const updateFont = (weight) => {
-        if (!item) return;
-        emit("update:modalValue", {fontWeight: weight});
-    };
-    const updateStyle = (style) => {
-        if (!item) return;
-        emit("update:modalValue", {fontStyle: style});
-    };
-    const updateImageAlignment = (alignment) => {
-        if (!item) return;
-        emit("update:modalValue", {verticalAlignment: alignment});
-    }
 </script>
 
 <style scoped>

@@ -19,14 +19,15 @@
 				@click="openEditModal(index)"
 				:class="[{ 'border border-gray-400 border-dashed': draggingOverIndex === index }]"
 			>
-				<!-- Render the component with dynamic props -->
-				<component
-					:is="components[item.component]"
-					:id="'component-' + index"
-					v-bind="item"
-					@update:modalValue="updateItemValue(index, $event)"
-					:item="droppedItems[index]"
-				/>
+			<!-- Render the component with dynamic props -->
+			<component
+				:is="components[item.component]"
+				:id="'component-' + index"
+				v-bind="item"
+				@update:modalValue="updateItemValue(index, $event)"
+				:item="item"
+				:key="index"
+			/>
 				<!-- Hover Icons -->
 				<div class="absolute -top-6 sm:-top-3 -right-[0.4rem] md:-right-[5.8rem] hidden group-hover:flex space-x-2">
 					<div
@@ -71,7 +72,7 @@
 					</div>
 				</div>
 			</div>
-		</div>
+	  </div>
 		<div v-else class="flex flex-col justify-center items-center">
 			<img class="w-28 h-28" src="/icons/drag-drop.png" alt="drag-drop">
 			<h1 class="text-gray-400">Drag and drop items into the workspace</h1>
@@ -89,118 +90,112 @@
 	/>
   </template>
   
-  <script setup>
-	import { ref, defineExpose } from 'vue';
-	
-	// Import the draggable components
+  <script>
+	import { markRaw } from 'vue';
 	import TextField from '../Field/TextField/TextField.vue';
 	import ImageField from '../Field/ImageField/ImageField.vue';
 	import BottomModal from '../Modal/BottomModal.vue';
-	
-	// Register the components
-	const components = {
-		TextField,
-		ImageField,
-		BottomModal
-	};
   
-	// Track the dropped items
-	const droppedItems = ref([]);
-	const draggingOverIndex = ref(null);
-	const activeModalIndex = ref(null);
-
-	// Expose droppedItems to parent component (App.vue)
-	defineExpose({
-		droppedItems
-	})
-	// Allow the drop by preventing the default behavior
-	const onDragOverWorkspace = (event) => {
-		event.preventDefault(); // Necessary to allow dropping
-	};
-	// Handle when dragging over an item (this will set the hover index)
-	const onDragOverItem = (index, event) => {
-		event.preventDefault(); // Necessary to allow dropping
-		draggingOverIndex.value = index; // Set the index of the item being hovered over
-	};
-	// Handle dropping an item at a specific index
-	const onDropItem = (index, event) => {
-		event.preventDefault();
-		if (draggingOverIndex.value !== null) {
-			const draggedData = event.dataTransfer.getData("application/json");
-			const draggedItem = JSON.parse(draggedData);
-		
-			// Insert the dragged item at the hovered position
-			droppedItems.value.splice(draggingOverIndex.value, 0, draggedItem);
-			draggingOverIndex.value = null; // Reset hover state
-		}
-	};
-	// Handle moving an item up in the sequence
-	const moveUp = (index) => {
-		if (index > 0) {
-			const temp = droppedItems.value[index];
-			droppedItems.value[index] = droppedItems.value[index - 1];
-			droppedItems.value[index - 1] = temp;
-		}
-	};
-	// Handle moving an item down in the sequence
-	const moveDown = (index) => {
-		if (index < droppedItems.value.length - 1) {
-			const temp = droppedItems.value[index];
-			droppedItems.value[index] = droppedItems.value[index + 1];
-			droppedItems.value[index + 1] = temp;
-		}
-	};
-	// Handle deleting an item
-	const onDelete = (index) => {
-		droppedItems.value.splice(index, 1);
-		activeModalIndex.value = 0;
-	};
-	// Handle the workspace drop action
-	const onDropWorkspace = (event) => {
-		event.preventDefault();
-		const data = event.dataTransfer.getData('application/json');
-		if (data) {
-			try {
-				const droppedItem = JSON.parse(data);
-				if (droppedItem && droppedItem.component && components[droppedItem.component]) {
-					if (droppedItem.component === 'ImageField' && !droppedItem.imagePreview) {
-						droppedItem.imagePreview = '/icons/placeholder-image.png';
-					} else if (droppedItem.component === 'TextField' && !droppedItem.modalValue) {
-						droppedItem.modalValue = 'Welcome to drag-drop builder';
-					}
-					const existingItemIndex = droppedItems.value.findIndex(item => item.component === droppedItem.component && item.id === droppedItem.id);
-					if (existingItemIndex === -1) {
-						droppedItems.value.push(droppedItem);
-					}
+	export default {
+		name: 'HomePage',
+		components: {
+			TextField,
+			ImageField,
+			BottomModal
+		},
+		data() {
+			return {
+				droppedItems: [],
+				draggingOverIndex: null,
+				activeModalIndex: null,
+				components: {
+					TextField: markRaw(TextField),  // Mark as raw to prevent reactivity
+					ImageField: markRaw(ImageField),  // Mark as raw to prevent reactivity
+					BottomModal: markRaw(BottomModal)  // Mark as raw to prevent reactivity
 				}
-			} catch (e) {
-				console.error('Error parsing dropped data:', e);
+			};
+		},
+		methods: {
+			onDragOverWorkspace(event) {
+				event.preventDefault();
+			},
+			onDragOverItem(index, event) {
+				event.preventDefault();
+				this.draggingOverIndex = index;
+			},
+			onDropItem(index, event) {
+				event.preventDefault();
+				if (this.draggingOverIndex !== null) {
+				const draggedData = event.dataTransfer.getData("application/json");
+				const draggedItem = JSON.parse(draggedData);
+				this.droppedItems.splice(this.draggingOverIndex, 0, draggedItem);
+				this.draggingOverIndex = null;
+				}
+			},
+			moveUp(index) {
+				if (index > 0) {
+				const temp = this.droppedItems[index];
+				this.droppedItems[index] = this.droppedItems[index - 1];
+				this.droppedItems[index - 1] = temp;
+				}
+			},
+			moveDown(index) {
+				if (index < this.droppedItems.length - 1) {
+				const temp = this.droppedItems[index];
+				this.droppedItems[index] = this.droppedItems[index + 1];
+				this.droppedItems[index + 1] = temp;
+				}
+			},
+			onDelete(index) {
+				this.droppedItems.splice(index, 1);
+				this.activeModalIndex = null;
+			},
+			onDropWorkspace(event) {
+				event.preventDefault();
+				const data = event.dataTransfer.getData('application/json');
+				if (data) {
+					try {
+						const droppedItem = JSON.parse(data);
+						if (droppedItem && droppedItem.component && this.components[droppedItem.component]) {
+							if (droppedItem.component === 'ImageField' && !droppedItem.imagePreview) {
+								droppedItem.imagePreview = '/icons/placeholder-image.png';
+							} else if (droppedItem.component === 'TextField' && !droppedItem.modalValue) {
+								droppedItem.modalValue = 'Welcome to drag-drop builder';
+							}
+							const existingItemIndex = this.droppedItems.findIndex(item => item.component === droppedItem.component && item.id === droppedItem.id);
+							if (existingItemIndex === -1) {
+								this.droppedItems.push(droppedItem);
+							}
+						}
+					} catch (e) {
+						console.error('Error parsing dropped data:', e);
+					}
+				} else {
+					console.error('No data found in drop event.');
+				}
+			},
+			updateItemValue(index, value) {
+				if (this.droppedItems[index]) {
+				const item = this.droppedItems[index];
+				item.id = value.id;
+				item.modalValue = value.value;
+				}
+			},
+			updateItemStyleValue(index, value) {
+				if (this.droppedItems[index]) {
+				const updatedItem = { ...this.droppedItems[index], ...value };
+				this.droppedItems[index] = updatedItem;
+				}
+			},
+			openEditModal(index) {
+				if (index >= 0 && index < this.droppedItems.length) {
+				this.activeModalIndex = index;
+				}
+			},
+			copyItem(index) {
+				const itemToCopy = { ...this.droppedItems[index] };
+				this.droppedItems.splice(index + 1, 0, itemToCopy);
 			}
-		} else {
-			console.error('No data found in drop event.');
 		}
 	};
-	const updateItemValue = (index, value) => {
-		if (droppedItems.value[index]) {
-			const item = droppedItems.value[index];
-			item.id = value.id;
-			item.modalValue = value.value;
-		}
-	};
-	const updateItemStyleValue = (index, value) => {
-		if (droppedItems.value[index]) {
-			const updatedItem = { ...droppedItems.value[index], ...value };
-			droppedItems.value[index] = updatedItem;
-		}
-	};
-	const openEditModal = (index) => {
-		if (index >= 0 && index < droppedItems.value.length) {
-			activeModalIndex.value = index;
-		}
-	};
-	// Copy an item and add it below the original one
-	const copyItem = (index) => {
-		const itemToCopy = { ...droppedItems.value[index] }; // Clone the item to keep the original data
-		droppedItems.value.splice(index + 1, 0, itemToCopy); // Insert the copied item below the original
-	};
-  </script>
+</script>

@@ -29,7 +29,7 @@
 </template>
 
 <script>
-	import Modal from '../../Modal/Modal.vue';
+	import Modal from "../../Modal/Modal.vue";
 
 	export default {
 		name: "ImageField",
@@ -43,46 +43,44 @@
 			},
 			modalValue: {
 				type: String,
-				default: '/icons/placeholder-image.png',
+				default: "/icons/placeholder-image.png",
 			},
 			item: {
 				type: Object,
 				required: true,
-			}
+			},
 		},
 		data() {
 			return {
 				isModalOpen: false,
-				placeholderImage: '/icons/placeholder-image.png',
+				placeholderImage: "/icons/placeholder-image.png",
 				uploadImage: null,
 				predefinedImages: [
-					'/images/pic1.png',
-					'/images/pic2.png',
-					'/images/pic3.png',
-					'/images/pic4.png',
+					"/images/pic1.png",
+					"/images/pic2.png",
+					"/images/pic3.png",
+					"/images/pic4.png",
 				],
 				selectedIndex: null,
 				temporarySelection: null,
 			};
 		},
 		watch: {
-			// Watch for changes to modalValue prop and update the selected index
 			modalValue(newVal) {
 				const index = this.predefinedImages.indexOf(newVal);
 				this.selectedIndex = index !== -1 ? index : null;
-			}
+			},
 		},
 		methods: {
 			onFileChange(event) {
-				const file = event.target.files[0];
+			const file = event.target.files[0];
 				if (file) {
 					const reader = new FileReader();
 					reader.onload = (e) => {
 						this.temporarySelection = e.target.result;
 						this.uploadImage = e.target.result;
 						this.selectedIndex = null;
-						// Emit the new modalValue value to parent
-						this.$emit("update:modalValue", {id: this.id, value: e.target.result} );
+						this.$emit("update:modalValue", { id: this.id, value: e.target.result });
 					};
 					reader.readAsDataURL(file);
 				}
@@ -93,12 +91,10 @@
 			selectPredefinedImage(index) {
 				this.selectedIndex = index;
 				this.temporarySelection = this.predefinedImages[index];
-				// Emit the updated modalValue value to parent
-				this.$emit("update:modalValue", {id: this.id, value: this.predefinedImages[index]} );
+				this.$emit("update:modalValue", { id: this.id, value: this.predefinedImages[index] });
 			},
 		},
 		mounted() {
-			// Initialize selectedIndex based on the initial modalValue prop
 			this.selectedIndex = this.predefinedImages.indexOf(this.modalValue);
 		},
 	};

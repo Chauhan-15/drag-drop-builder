@@ -22,5 +22,10 @@
                 required: true,
             },
         },
+        methods: {
+            closeModal() {
+                this.$emit("update:isOpen", false);
+            },
+        },
     };
 </script>
