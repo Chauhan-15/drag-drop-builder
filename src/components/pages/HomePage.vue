@@ -13,7 +13,7 @@
 			<div
 				v-for="(item, index) in droppedItems"
 				:key="index"
-				class="relative group p-2 rounded-md transition-all duration-300"
+				class="relative group p-2 rounded-md transition-all duration-300 hover:border-2 hover:border-gray-200"
 				@dragover="onDragOverItem(index, $event)"
 				@drop="onDropItem(index, $event)"
 				@click="openEditModal(index)"
@@ -22,7 +22,7 @@
 			<!-- Render the component with dynamic props -->
 			<component
 				:is="components[item.component]"
-				:id="'component-' + index"
+				:id="index"
 				v-bind="item"
 				@update:modalValue="updateItemValue(index, $event)"
 				:item="item"
@@ -126,10 +126,10 @@
 			onDropItem(index, event) {
 				event.preventDefault();
 				if (this.draggingOverIndex !== null) {
-				const draggedData = event.dataTransfer.getData("application/json");
-				const draggedItem = JSON.parse(draggedData);
-				this.droppedItems.splice(this.draggingOverIndex, 0, draggedItem);
-				this.draggingOverIndex = null;
+					const draggedData = event.dataTransfer.getData("application/json");
+					const draggedItem = JSON.parse(draggedData);
+					this.droppedItems.splice(this.draggingOverIndex, 0, draggedItem);
+					this.draggingOverIndex = null;
 				}
 			},
 			moveUp(index) {
@@ -173,12 +173,14 @@
 				} else {
 					console.error('No data found in drop event.');
 				}
+
 			},
 			updateItemValue(index, value) {
 				if (this.droppedItems[index]) {
 				const item = this.droppedItems[index];
-				item.id = value.id;
-				item.modalValue = value.value;
+					item.id = (value.id + 1);
+					item.modalValue = value.value;
+					item.position = value.id;
 				}
 			},
 			updateItemStyleValue(index, value) {

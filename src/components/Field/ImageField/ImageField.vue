@@ -38,7 +38,7 @@
 		},
 		props: {
 			id: {
-				type: String,
+				type: Number,
 				required: true,
 			},
 			modalValue: {
@@ -89,6 +89,7 @@
 				this.isModalOpen = true;
 			},
 			selectPredefinedImage(index) {
+				this.isModalOpen = false;
 				this.selectedIndex = index;
 				this.temporarySelection = this.predefinedImages[index];
 				this.$emit("update:modalValue", { id: this.id, value: this.predefinedImages[index] });

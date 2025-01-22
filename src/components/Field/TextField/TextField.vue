@@ -15,7 +15,7 @@
         name: "TextField",
         props: {
             id: {
-                type: String,
+                type: Number,
                 required: true,
             },
             label: {
